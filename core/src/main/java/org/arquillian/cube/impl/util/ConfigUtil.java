@@ -1,11 +1,17 @@
 package org.arquillian.cube.impl.util;
 
+import java.io.ByteArrayInputStream;
+import java.io.StringReader;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import javax.xml.parsers.*;
+import org.w3c.dom.*;
+import org.xml.sax.InputSource;
+
 
 import static org.arquillian.cube.impl.util.SystemEnvironmentVariables.getPropertyOrEnvironmentVariable;
 
@@ -96,5 +102,31 @@ public class ConfigUtil {
             }
         }
         return urls.toArray(new URL[urls.size()]);
+    }
+
+    public static List<String> getXmlProperty(String name, Map<String, String> map, List<String> defaultValue) {
+        String xmlRecords;
+        if (map.containsKey(name) && Strings.isNotNullOrEmpty(xmlRecords = map.get(name))) {
+            List<String> properties = new ArrayList<>();
+            try {
+                DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+                DocumentBuilder db = dbf.newDocumentBuilder();
+                InputSource is = new InputSource();
+                is.setCharacterStream(new StringReader(xmlRecords));
+                Document doc = db.parse(is);
+
+                NodeList elements = doc.getElementsByTagName("dependency");
+                for (int i = 0; i < elements.getLength(); i++) {
+                    System.out.println(elements.item(i).getTextContent());
+                    properties.add(elements.item(i).getTextContent());
+                }
+                System.out.println(properties.toString());
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+            return properties;
+        } else {
+            return defaultValue;
+        }
     }
 }

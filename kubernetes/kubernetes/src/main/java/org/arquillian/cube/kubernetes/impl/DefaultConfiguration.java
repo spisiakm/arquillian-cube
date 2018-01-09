@@ -24,10 +24,7 @@ import org.arquillian.cube.impl.util.SystemEnvironmentVariables;
 import org.arquillian.cube.kubernetes.api.Configuration;
 import org.arquillian.cube.kubernetes.api.KubernetesResourceLocator;
 
-import static org.arquillian.cube.impl.util.ConfigUtil.asURL;
-import static org.arquillian.cube.impl.util.ConfigUtil.getBooleanProperty;
-import static org.arquillian.cube.impl.util.ConfigUtil.getLongProperty;
-import static org.arquillian.cube.impl.util.ConfigUtil.getStringProperty;
+import static org.arquillian.cube.impl.util.ConfigUtil.*;
 
 @Buildable(builderPackage = "io.fabric8.kubernetes.api.builder.v3_1", generateBuilderPackage = false, editableEnabled = false)
 public class DefaultConfiguration implements Configuration {
@@ -132,7 +129,7 @@ public class DefaultConfiguration implements Configuration {
                     asUrlOrResource(getStringProperty(ENVIRONMENT_TEARDOWN_SCRIPT_URL, map, null)))
                 .withEnvironmentConfigUrl(getKubernetesConfigurationUrl(map))
                 .withEnvironmentDependencies(
-                    asURL(Strings.splitAndTrimAsList(getStringProperty(ENVIRONMENT_DEPENDENCIES, map, ""), "\\s*,\\s*")))
+                    asURL(getXmlProperty(ENVIRONMENT_DEPENDENCIES, map, null)))
                 .withNamespaceLazyCreateEnabled(
                     getBooleanProperty(NAMESPACE_LAZY_CREATE_ENABLED, map, DEFAULT_NAMESPACE_LAZY_CREATE_ENABLED))
                 .withNamespaceCleanupEnabled(getBooleanProperty(NAMESPACE_CLEANUP_ENABLED, map, true))

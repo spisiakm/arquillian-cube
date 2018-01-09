@@ -16,11 +16,7 @@ import org.arquillian.cube.impl.util.Strings;
 import org.arquillian.cube.kubernetes.impl.DefaultConfiguration;
 import org.arquillian.cube.openshift.api.ConfigurationHandle;
 
-import static org.arquillian.cube.impl.util.ConfigUtil.asURL;
-import static org.arquillian.cube.impl.util.ConfigUtil.getBooleanProperty;
-import static org.arquillian.cube.impl.util.ConfigUtil.getIntProperty;
-import static org.arquillian.cube.impl.util.ConfigUtil.getLongProperty;
-import static org.arquillian.cube.impl.util.ConfigUtil.getStringProperty;
+import static org.arquillian.cube.impl.util.ConfigUtil.*;
 import static org.arquillian.cube.openshift.impl.utils.Strings.isNotNullOrEmpty;
 import static org.arquillian.cube.openshift.impl.utils.Strings.isNullOrEmpty;
 
@@ -164,7 +160,7 @@ public class CubeOpenShiftConfiguration extends DefaultConfiguration implements
                     asUrlOrResource(getStringProperty(ENVIRONMENT_TEARDOWN_SCRIPT_URL, map, null)))
                 .withEnvironmentConfigUrl(getKubernetesConfigurationUrl(map))
                 .withEnvironmentDependencies(
-                    asURL(Strings.splitAndTrimAsList(getStringProperty(ENVIRONMENT_DEPENDENCIES, map, ""), "\\s*,\\s*")))
+                    asURL(getXmlProperty(ENVIRONMENT_DEPENDENCIES, map, null)))
                 .withNamespaceLazyCreateEnabled(
                     getBooleanProperty(NAMESPACE_LAZY_CREATE_ENABLED, map, DEFAULT_NAMESPACE_LAZY_CREATE_ENABLED))
                 .withNamespaceCleanupEnabled(getBooleanProperty(NAMESPACE_CLEANUP_ENABLED, map, true))
